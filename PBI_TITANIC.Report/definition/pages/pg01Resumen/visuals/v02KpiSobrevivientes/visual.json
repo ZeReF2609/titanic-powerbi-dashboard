@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "v02KpiSobrevivientes",
+  "position": {
+    "x": 330,
+    "y": 70,
+    "z": 1002,
+    "width": 280,
+    "height": 110,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "c_train"
+                    }
+                  },
+                  "Property": "Sobrevivientes"
+                }
+              },
+              "queryRef": "c_train.Sobrevivientes",
+              "nativeQueryRef": "Sobrevivientes"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

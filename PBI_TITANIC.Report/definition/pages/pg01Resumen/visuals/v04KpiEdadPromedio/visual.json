@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "v04KpiEdadPromedio",
+  "position": {
+    "x": 930,
+    "y": 70,
+    "z": 1004,
+    "width": 280,
+    "height": 110,
+    "tabOrder": 4
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "c_train"
+                    }
+                  },
+                  "Property": "Edad Promedio"
+                }
+              },
+              "queryRef": "c_train.Edad Promedio",
+              "nativeQueryRef": "Edad Promedio"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.6.0/schema.json",
+  "name": "v01KpiPasajeros",
+  "position": {
+    "x": 30,
+    "y": 70,
+    "z": 1001,
+    "width": 280,
+    "height": 110,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "c_train"
+                    }
+                  },
+                  "Property": "Pasajeros"
+                }
+              },
+              "queryRef": "c_train.Pasajeros",
+              "nativeQueryRef": "Pasajeros"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

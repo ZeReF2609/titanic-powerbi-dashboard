@@ -1,0 +1,151 @@
+table c_train
+	lineageTag: 71b7ea8a-7c7e-4519-b380-caea9ab5be03
+
+	measure Pasajeros = COUNTROWS(c_train)
+		formatString: #,0
+		displayFolder: KPIs
+		lineageTag: 2d46e4fc-d567-4fd6-84e0-9fe630b22006
+
+	measure Sobrevivientes = CALCULATE(COUNTROWS(c_train), c_train[Survived] = 1)
+		formatString: #,0
+		displayFolder: KPIs
+		lineageTag: 57d3e8d0-814d-4db4-9d02-b1a47ef5231f
+
+	measure Fallecidos = [Pasajeros] - [Sobrevivientes]
+		formatString: #,0
+		displayFolder: KPIs
+		lineageTag: 1edce117-fc32-4aa8-b385-0403d6084016
+
+	measure 'Tasa de Supervivencia' = DIVIDE([Sobrevivientes], [Pasajeros])
+		formatString: 0.0%
+		displayFolder: KPIs
+		lineageTag: 746950f0-c3c3-4af4-90e3-63129400bbf1
+
+	measure 'Edad Promedio' = AVERAGE(c_train[Age])
+		formatString: 0.0
+		displayFolder: KPIs
+		lineageTag: 937dc717-654c-4cda-aae7-3441d2d67b25
+
+	measure 'Tarifa Promedio' = AVERAGE(c_train[Fare])
+		formatString: #,0.00
+		displayFolder: KPIs
+		lineageTag: 6e4ed37c-c167-4754-aacf-a181e29390f0
+
+	column PassengerId
+		dataType: int64
+		lineageTag: 98220cc4-3646-4543-86d7-adcc1232ba78
+		summarizeBy: none
+		sourceColumn: PassengerId
+
+	column Survived
+		dataType: int64
+		lineageTag: 79b43815-8dd4-4e39-95ba-c471ce249967
+		summarizeBy: none
+		sourceColumn: Survived
+
+	column Pclass
+		dataType: int64
+		lineageTag: c48cc957-4a6c-41cf-804b-9073e9c26b8b
+		summarizeBy: none
+		sourceColumn: Pclass
+
+	column Name
+		dataType: string
+		lineageTag: 873a8e40-bc06-4402-9cf0-59663b0b8ecf
+		summarizeBy: none
+		sourceColumn: Name
+
+	column Sex
+		dataType: string
+		lineageTag: 1bb2410b-286d-4aaa-ae5c-fab09b532a1f
+		summarizeBy: none
+		sourceColumn: Sex
+
+	column Age
+		dataType: double
+		lineageTag: 041f169c-1ce2-44c0-a2d9-3ae17fc63cea
+		summarizeBy: none
+		sourceColumn: Age
+
+	column SibSp
+		dataType: int64
+		lineageTag: 2315fd4f-acfe-4455-bbaf-401f4a0942f5
+		summarizeBy: none
+		sourceColumn: SibSp
+
+	column Parch
+		dataType: int64
+		lineageTag: 71dab28a-a7ca-4f5f-a140-db1ebf72313c
+		summarizeBy: none
+		sourceColumn: Parch
+
+	column Ticket
+		dataType: string
+		lineageTag: 2023fd54-535d-4dca-96ae-04b03896a381
+		summarizeBy: none
+		sourceColumn: Ticket
+
+	column Fare
+		dataType: double
+		lineageTag: 4fbaf673-650a-4c27-987a-b64c3162140f
+		summarizeBy: none
+		sourceColumn: Fare
+
+	column Cabin
+		dataType: string
+		lineageTag: ad9fcec4-d0b9-4b89-bd91-fa6f8c776207
+		summarizeBy: none
+		sourceColumn: Cabin
+
+	column Embarked
+		dataType: string
+		lineageTag: d1ed9c49-bfbf-4709-b31e-f9be7c262587
+		summarizeBy: none
+		sourceColumn: Embarked
+
+	column Estado = IF(c_train[Survived] = 1, "Sobrevivió", "No sobrevivió")
+		dataType: string
+		lineageTag: 7293fd5e-c192-40a6-a5a2-a002a790ffec
+		summarizeBy: none
+
+	column Clase = SWITCH(c_train[Pclass], 1, "1ª clase", 2, "2ª clase", 3, "3ª clase")
+		dataType: string
+		lineageTag: 81afb17e-f811-4f66-a821-084f0bfc9e87
+		summarizeBy: none
+
+	column Sexo = IF(c_train[Sex] = "male", "Hombre", "Mujer")
+		dataType: string
+		lineageTag: c864c79f-cd02-404b-9c25-5229f4ab3e42
+		summarizeBy: none
+
+	column Puerto = SWITCH(c_train[Embarked], "S", "Southampton", "C", "Cherbourg", "Q", "Queenstown", "Sin dato")
+		dataType: string
+		lineageTag: 4796b967-263c-43d8-97fe-70d1b0353e96
+		summarizeBy: none
+
+	column 'Orden Edad' = IF(ISBLANK(c_train[Age]), 6, SWITCH(TRUE(), c_train[Age] < 13, 1, c_train[Age] < 18, 2, c_train[Age] < 35, 3, c_train[Age] < 60, 4, 5))
+		dataType: int64
+		lineageTag: 2e7f245c-a19b-42c9-bef6-311b3e8daf99
+		summarizeBy: none
+
+	column 'Grupo Edad' = SWITCH(c_train[Orden Edad], 1, "0-12", 2, "13-17", 3, "18-34", 4, "35-59", 5, "60+", "Sin dato")
+		dataType: string
+		lineageTag: b6c29507-b3d7-4341-a58c-4b04f4bd3a47
+		summarizeBy: none
+		sortByColumn: 'Orden Edad'
+
+	column 'Tamaño Familia' = c_train[SibSp] + c_train[Parch] + 1
+		dataType: int64
+		lineageTag: 7160cfac-c7b0-442b-82e8-98d47351f537
+		summarizeBy: none
+
+	partition c_train-9536ffe9-1f89-48a0-89f8-1e49c074dece = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\DSRP_CLAUDE\c.train.csv"),[Delimiter=",", Columns=12, Encoding=1252, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"PassengerId", Int64.Type}, {"Survived", Int64.Type}, {"Pclass", Int64.Type}, {"Name", type text}, {"Sex", type text}, {"Age", type number}, {"SibSp", Int64.Type}, {"Parch", Int64.Type}, {"Ticket", type text}, {"Fare", type number}, {"Cabin", type text}, {"Embarked", type text}}, "en-US")
+				in
+				    #"Changed Type"
+

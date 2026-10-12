@@ -1,0 +1,79 @@
+table c_test
+	lineageTag: 09d3dc86-1718-49e1-b0f8-5d71510bf9e7
+
+	column PassengerId
+		dataType: int64
+		lineageTag: 2079eb3e-90ed-4576-9f35-13ea36515fc7
+		summarizeBy: none
+		sourceColumn: PassengerId
+
+	column Pclass
+		dataType: int64
+		lineageTag: 4a839db7-a665-4f9e-9e3f-efe2337ca19e
+		summarizeBy: none
+		sourceColumn: Pclass
+
+	column Name
+		dataType: string
+		lineageTag: 9e6b262b-bdf7-4ef3-ad63-6480decd9c8f
+		summarizeBy: none
+		sourceColumn: Name
+
+	column Sex
+		dataType: string
+		lineageTag: 2f0c08e5-3de9-40ad-8e60-d88cac6f8a61
+		summarizeBy: none
+		sourceColumn: Sex
+
+	column Age
+		dataType: double
+		lineageTag: be3ddd29-bbf3-4498-96a1-6d03c9f963b9
+		summarizeBy: none
+		sourceColumn: Age
+
+	column SibSp
+		dataType: int64
+		lineageTag: 7584a764-a7d6-4ef4-ba43-a8dbbc35f56d
+		summarizeBy: none
+		sourceColumn: SibSp
+
+	column Parch
+		dataType: int64
+		lineageTag: 01251cf1-0639-4526-897a-3389ad14eb6b
+		summarizeBy: none
+		sourceColumn: Parch
+
+	column Ticket
+		dataType: string
+		lineageTag: a45f2f72-a5cb-4642-b703-c6c0197c2778
+		summarizeBy: none
+		sourceColumn: Ticket
+
+	column Fare
+		dataType: double
+		lineageTag: 9e1fd53c-cab4-4924-bd12-2f360df200ae
+		summarizeBy: none
+		sourceColumn: Fare
+
+	column Cabin
+		dataType: string
+		lineageTag: 81189d3b-2330-4a77-bf0f-ae7a935f973a
+		summarizeBy: none
+		sourceColumn: Cabin
+
+	column Embarked
+		dataType: string
+		lineageTag: 37ff0a2d-1bb0-465e-bf41-f6239100678e
+		summarizeBy: none
+		sourceColumn: Embarked
+
+	partition c_test-4beb4b56-216c-4694-a909-de57782da577 = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\DSRP_CLAUDE\c.test.csv"),[Delimiter=",", Columns=11, Encoding=1252, QuoteStyle=QuoteStyle.Csv]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"PassengerId", Int64.Type}, {"Pclass", Int64.Type}, {"Name", type text}, {"Sex", type text}, {"Age", type number}, {"SibSp", Int64.Type}, {"Parch", Int64.Type}, {"Ticket", type text}, {"Fare", type number}, {"Cabin", type text}, {"Embarked", type text}}, "en-US")
+				in
+				    #"Changed Type"
+
